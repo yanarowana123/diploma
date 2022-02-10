@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DustController;
 use App\Http\Controllers\Admin\GrassPollenController;
 use App\Http\Controllers\Admin\MoldController;
@@ -23,6 +24,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/city/create', [CityController::class, 'create'])->name('admin.city.create');
+    Route::post('/admin/city', [CityController::class, 'store'])->name('admin.city.store');
+
+
     Route::get('/admin/article', [ArticleController::class, 'index'])->name('admin.article.index');
     Route::get('/admin/article/create', [ArticleController::class, 'create'])->name('admin.article.create');
     Route::post('/admin/article/store', [ArticleController::class, 'store'])->name('admin.article.store');
