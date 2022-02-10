@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <section style="width: 75%; margin: 0 auto;margin-top: 20px;">
-        <a class="card text-center"
-           style="">
-            <img class="card-img-top" style="max-width:500px;display: block;margin: 0 auto"
+        <div class="card text-center"
+             style="">
+            <img class="card-img-top" style="object-fit:contain; max-width:500px;display: block;margin: 0 auto"
                  src="{{$article->image}}"
                  alt="Card image cap">
             <div class="card-body">
@@ -12,6 +12,6 @@
                     {!! $article->content !!}
                 </div>
             </div>
-        </a>
+        </div>
     </section>
 @endsection

@@ -168,7 +168,7 @@
                 @foreach($articles as $key => $article)
                     <a href="{{route('article.view',$article)}}" class="card text-center"
                        style="width: 33%; margin: 0 auto; margin-bottom: 10px">
-                        <img class="card-img-top" style="width: 200px; display: block;margin: 0 auto"
+                        <img class="card-img-top" style="object-fit:contain; width: 300px; display: block;margin: 0 auto"
                              src="{{$article->image}}"
                              alt="Card image cap">
                         <div class="card-body">
