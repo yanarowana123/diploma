@@ -16,6 +16,7 @@
                         <thead>
                         <tr>
                             <th scope="col">City</th>
+                            <th scope="col">Time</th>
                             <th scope="col">description</th>
                             <th scope="col">Temp</th>
                             <th scope="col">Feels_like</th>
@@ -30,6 +31,7 @@
                         @foreach($weathers as $index=>$weather)
                             <tr>
                                 <td>{{$weather->city->name}}</td>
+                                <td>{{$weather->time}}</td>
                                 <td>{{$weather->description}}</td>
                                 <td>{{$weather->temp}}</td>
                                 <td>{{$weather->temp_feels_like}}</td>
