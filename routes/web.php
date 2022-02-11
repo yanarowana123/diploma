@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\GrassPollenController;
 use App\Http\Controllers\Admin\MoldController;
 use App\Http\Controllers\Admin\RagweedPollenController;
 use App\Http\Controllers\Admin\TreePollenController;
+use App\Http\Controllers\Admin\WeatherController;
 use App\Http\Controllers\DustPollenController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\MoldPollenController;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/weather', WeatherController::class)->name('admin.city.create');
+
+
     Route::get('/admin/city/create', [CityController::class, 'create'])->name('admin.city.create');
     Route::post('/admin/city', [CityController::class, 'store'])->name('admin.city.store');
 
