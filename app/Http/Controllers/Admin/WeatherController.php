@@ -18,7 +18,7 @@ class WeatherController extends Controller
 {
     public function __invoke()
     {
-        $weathers = Weather::with('city')->paginate(30);
+        $weathers = Weather::with('city')->orderBy('time', 'DESC')->paginate(30);
         return \view('admin.weather', compact('weathers'));
     }
 }
