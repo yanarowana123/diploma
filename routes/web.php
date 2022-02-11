@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/weather', WeatherController::class)->name('admin.city.create');
+    Route::get('/admin/weather', WeatherController::class)->name('admin.weather');
 
 
     Route::get('/admin/city/create', [CityController::class, 'create'])->name('admin.city.create');
