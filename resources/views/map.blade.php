@@ -6,7 +6,9 @@
 
 @push('scripts')
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet'/>
-
+    <?php
+    $ak = config('weather.api_key')
+    ?>
     <style>
         body {
             margin: 0;
@@ -29,18 +31,18 @@
         }
 
         .mapboxgl-popup {
-            max-width: 400px;
+            max-width: 75% !important;
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+
+        .mapboxgl-popup-content {
+            width: 100%;
         }
     </style>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
 
     <script>
-
-        // const coords = {
-        //     ''
-        // }
 
         mapboxgl.accessToken = 'pk.eyJ1IjoieWFuYXJvd2FuYTEyMyIsImEiOiJja3o3ODBsdzYwajE3Mm9ueHYwZnQ0OXhkIn0.WIDzfwgQYgs7f8dHmkWyKw';
         const map = new mapboxgl.Map({
@@ -49,27 +51,6 @@
             center: [71.446, 51.1801],
             zoom: 4.3
         });
-
-        // map.scrollZoom.disable();
-
-
-        // create the popup
-        // const popup = new mapboxgl.Popup({offset: 25}).setText(
-        //     'Construction on the Washington Monument began in 1848.'
-        // );
-        //
-        // const monument = [71.446, 51.1801];
-
-
-        // // create DOM element for the marker
-        // const el = document.createElement('div');
-        // el.id = 'marker';
-
-        // // create the marker
-        // new mapboxgl.Marker(el)
-        //     .setLngLat(monument)
-        //     .setPopup(popup) // sets a popup on this marker
-        //     .addTo(map);
 
 
         map.on('style.load', function () {
@@ -88,30 +69,74 @@
                         return response.json()
                     })
                     .then(data => {
-                        let temp = kelvinToCelsius(data.main.temp);
 
-                        let weatherDescription = data.weather[0].description;
-                        let weatherIcon = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+                        let openWeather = data.openWeather;
 
-                        let windSpeed = data.wind.speed;
+                        let accuWeather = null
+                        let accuIcon = '';
+                        if (data.accu) {
+                            accuWeather = data.accu[0];
+                            if (accuWeather.WeatherIcon > 9) {
+                                accuIcon = `https://developer.accuweather.com/sites/default/files/${accuWeather.WeatherIcon}-s.png`;
+                            } else {
+                                accuIcon = `https://developer.accuweather.com/sites/default/files/0${accuWeather.WeatherIcon}-s.png`;
+                            }
+                        }
 
-                        let weatherTitle = data.weather[0].main;
+                        let weatherApiTemp = null;
+                        let weatherApiText = null;
+                        let weatherApiIcon = null;
+                        if (data.weatherApi) {
+                            console.log(data.weatherApi)
+                            weatherApiTemp = data.weatherApi.current.temp_c
+                            weatherApiText = data.weatherApi.current.condition.text
+                            weatherApiIcon = data.weatherApi.current.condition.icon
+                        }
+                        let temp = kelvinToCelsius(openWeather.main.temp);
+
+                        let weatherDescription = openWeather.weather[0].description;
+                        let weatherIcon = `http://openweathermap.org/img/wn/${openWeather.weather[0].icon}@2x.png`;
+
+                        let windSpeed = openWeather.wind.speed;
+
+                        let weatherTitle = openWeather.weather[0].main;
 
                         new mapboxgl.Popup()
                             .setLngLat(coordinates)
-                            .setHTML(`City: ${data.name}<br>
-${weatherTitle} <br>
+                            .setHTML(`<div> <p class="text-bold">City: ${openWeather.name}</p><br>
+<div class="d-flex">
+<div>
+<p class="text-bold">OpenWeather</p>
+<br>
+${weatherTitle}
 <img src="${weatherIcon}">
 Temperature: ${temp}°C <br>
+</div>
+<div>
+<p class="text-bold">WeatherApi</p>
 <br>
-<a href="/${data.name}/article" style="text-decoration: underline">More info</a>`)
+${weatherApiText ? weatherApiText : 'Service is Unavailable'}
+<img src="${weatherApiIcon}">
+Temperature: ${weatherApiTemp ? weatherApiTemp : 'Service is Unavailable'}°C <br>
+</div>
+<div>
+<p class="text-bold">AccuWeather</p>
+<br>
+${accuWeather ? accuWeather.WeatherText : 'Service is Unavailable'}
+<img src="${accuIcon}">
+Temperature: ${accuWeather ? accuWeather.Temperature.Metric.Value : 'Service is Unavailable'}°C <br>
+</div>
+</div>
+</div>
+<br>
+<a href="/${openWeather.name}/article" style="text-decoration: underline">More info</a></div>`)
                             .addTo(map);
                     })
             });
 
         });
 
-        const kelvinToCelsius = (temp) => (temp - 273.15);
+        const kelvinToCelsius = (temp) => ((temp - 273.15).toFixed(2));
 
     </script>
 @endpush

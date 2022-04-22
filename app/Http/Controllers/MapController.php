@@ -30,13 +30,32 @@ class MapController extends Controller
             ->first();
 
 
+        $accuWeatherCity = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey='
+            . config('weather.ACCUWEATHER_KEY') . "&q=$lat,$lon";
+        $accuResponse = null;
+        $weatherApiResponse = null;
+        $weatherApi = 'http://api.weatherapi.com/v1/current.json?key=' . config('weather.WEATHER_KEY')
+            . "&q=$lat,$lon&aqi=no";
+        try {
+            $response = Http::get($accuWeatherCity);
+            $cityKey = $response->json()['Key'];
+            $accuWeatherUrl = "http://dataservice.accuweather.com/currentconditions/v1/$cityKey?apikey=" . config('weather.ACCUWEATHER_KEY');
+            $accuResponse = Http::get($accuWeatherUrl)->json();
+        } catch (\Exception $exception) {
+        }
+
+        try{
+            $weatherApiResponse = Http::get($weatherApi)->json();
+        } catch (\Exception $exception) {
+        }
+
         if ($city) {
             $weather = Weather::where('city_id', $city->id)
                 ->where('time', date('Y-m-d H') . '-00-00')
                 ->first();
 
             if ($weather) {
-                $data = [
+                $openWeather = [
                     'main' => [
                         'temp' => $weather->temp
                     ],
@@ -51,6 +70,11 @@ class MapController extends Controller
                         'speed' => $weather->wind_speed],
                     'name' => $weather->city->name];
 
+                $data = [
+                    'openWeather' => $openWeather,
+                    'accu' => $accuResponse,
+                    'weatherApi' => $weatherApiResponse
+                ];
                 return response()->json($data);
             }
         }
@@ -58,43 +82,57 @@ class MapController extends Controller
 
         $apiKey = config('weather.api_key');
         $url = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey";
-        $response = Http::get($url);
+        $openWeatherResponse = Http::get($url);
 
         if ($city) {
-            $data = [
+            $openWeatherData = [
                 'time' => date('Y-m-d H') . '-00-00',
-                'temp' => $response->json()['main']['temp'],
-                'temp_feels_like' => $response->json()['main']['feels_like'],
-                'pressure' => $response->json()['main']['pressure'],
-                'humidity' => $response->json()['main']['humidity'],
-                'title' => $response->json()['weather'][0]['main'],
-                'description' => $response->json()['weather'][0]['description'],
-                'icon' => $response->json()['weather'][0]['icon'],
-                'wind_speed' => $response->json()['wind']['speed'],
-                'wind_direction' => $response->json()['wind']['deg'],
-                'visibility' => $response->json()['visibility'],
+                'temp' => $openWeatherResponse->json()['main']['temp'],
+                'temp_feels_like' => $openWeatherResponse->json()['main']['feels_like'],
+                'pressure' => $openWeatherResponse->json()['main']['pressure'],
+                'humidity' => $openWeatherResponse->json()['main']['humidity'],
+                'title' => $openWeatherResponse->json()['weather'][0]['main'],
+                'description' => $openWeatherResponse->json()['weather'][0]['description'],
+                'icon' => $openWeatherResponse->json()['weather'][0]['icon'],
+                'wind_speed' => $openWeatherResponse->json()['wind']['speed'],
+                'wind_direction' => $openWeatherResponse->json()['wind']['deg'],
+                'visibility' => $openWeatherResponse->json()['visibility'],
                 'city_id' => $city->id,
                 'name' => $city->name
             ];
-            Weather::create($data);
+            Weather::create($openWeatherData);
 
-            $data = [
+            $openWeatherData = [
                 'main' => [
-                    'temp' => $response->json()['main']['temp']
+                    'temp' => $openWeatherResponse->json()['main']['temp']
                 ],
                 'weather' => [
                     [
-                        'main' => $response->json()['weather'][0]['main'],
-                        'description' => $response->json()['weather'][0]['description'],
-                        'icon' => $response->json()['weather'][0]['icon'],
+                        'main' => $openWeatherResponse->json()['weather'][0]['main'],
+                        'description' => $openWeatherResponse->json()['weather'][0]['description'],
+                        'icon' => $openWeatherResponse->json()['weather'][0]['icon'],
                     ],
                 ],
                 'wind' => [
-                    'speed' => $response->json()['wind']['speed']],
+                    'speed' => $openWeatherResponse->json()['wind']['speed']],
                 'name' => $city->name];
+
+            $data = [
+                'openWeather' => $openWeatherData,
+                'accu' => $accuResponse,
+                'weatherApi' => $weatherApiResponse
+            ];
+
             return response()->json($data);
         }
 
-        return response()->json($response->json());
+        $data = [
+            'openWeather' => $openWeatherResponse->json(),
+            'accu' => $accuResponse,
+            'weatherApi' => $weatherApiResponse
+        ];
+
+        return response()->json($data);
     }
+
 }
