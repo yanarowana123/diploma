@@ -27,6 +27,12 @@
         .menu__item:hover {
             color: royalblue;
         }
+
+        @media (min-width: 768px) {
+            .w-md-50 {
+                width: 50% !important;
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased">
