@@ -87,7 +87,6 @@
                         let weatherApiText = null;
                         let weatherApiIcon = null;
                         if (data.weatherApi) {
-                            console.log(data.weatherApi)
                             weatherApiTemp = data.weatherApi.current.temp_c
                             weatherApiText = data.weatherApi.current.condition.text
                             weatherApiIcon = data.weatherApi.current.condition.icon
@@ -103,16 +102,16 @@
 
                         new mapboxgl.Popup()
                             .setLngLat(coordinates)
-                            .setHTML(`<div> <p class="text-bold">City: ${openWeather.name}</p><br>
+                            .setHTML(`<div> <p class="text-bold" style="font-size: 1.2rem">${openWeather.name}</p><br>
 <div class="d-flex">
-<div>
+<div class="mr-1">
 <p class="text-bold">OpenWeather</p>
 <br>
 ${weatherTitle}
 <img src="${weatherIcon}">
 Temperature: ${temp}°C <br>
 </div>
-<div>
+<div class="mr-1">
 <p class="text-bold">WeatherApi</p>
 <br>
 ${weatherApiText ? weatherApiText : 'Service is Unavailable'}
