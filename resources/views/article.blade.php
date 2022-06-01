@@ -271,7 +271,7 @@
             <h2 class="text-bold" style="font-size: 1.3rem;margin-top:40px; margin-bottom: 20px;">Articles</h2>
             <div
                 style="flex-basis: 33.333333%"
-                class="d-flex flex-column flex-md-row align-content-center flex-wrap hui"
+                class="d-flex flex-column flex-md-row align-content-center flex-wrap"
             >
                 @foreach($articles as $key => $article)
                     <a href="{{route('article.view',$article)}}" class="card text-center mb-4 ml-md-2">

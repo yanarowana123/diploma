@@ -93,10 +93,7 @@
                         }
                         let temp = kelvinToCelsius(openWeather.main.temp);
 
-                        let weatherDescription = openWeather.weather[0].description;
                         let weatherIcon = `http://openweathermap.org/img/wn/${openWeather.weather[0].icon}@2x.png`;
-
-                        let windSpeed = openWeather.wind.speed;
 
                         let weatherTitle = openWeather.weather[0].main;
 
