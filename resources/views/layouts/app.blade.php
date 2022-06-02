@@ -18,7 +18,7 @@
 
 
     <!-- Scripts -->
-{{--    <script src="{{ asset('js/app.js') }}" defer></script>--}}
+    {{--    <script src="{{ asset('js/app.js') }}" defer></script>--}}
 
     <style>
         .aa {
@@ -29,18 +29,35 @@
             color: royalblue;
         }
 
+        .articles-wrapper {
+            display: flex !important;
+            flex-wrap: wrap !important;
+        }
+
+        .articles-wrapper > * {
+            flex: 1 1 300px;
+        }
+
+        /*.aaaa {*/
+        /*    max-width: 33%;*/
+        /*}*/
+
         @media (min-width: 768px) {
             .w-md-50 {
                 width: 50% !important;
             }
+
+            /*.aaaa {*/
+            /*    max-width: 100%;*/
+            /*}*/
         }
     </style>
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen">
-{{--            @include('layouts.navigation')--}}
+    {{--            @include('layouts.navigation')--}}
 
-<!-- Page Heading -->
+    <!-- Page Heading -->
     <header class="bg-white shadow" style="position: relative;z-index:1000">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <a href="{{route('home')}}" class="menu__item mr-2

@@ -74,6 +74,7 @@
 
                         let accuWeather = null
                         let accuIcon = '';
+                        console.log(data);
                         if (data.accu) {
                             accuWeather = data.accu[0];
                             if (accuWeather.WeatherIcon > 9) {
@@ -120,7 +121,7 @@ Temperature: ${weatherApiTemp ? weatherApiTemp : 'Service is Unavailable'}°C <b
 <br>
 ${accuWeather ? accuWeather.WeatherText : 'Service is Unavailable'}
 <img src="${accuIcon}">
-Temperature: ${accuWeather ? accuWeather.Temperature.Metric.Value : 'Service is Unavailable'}°C <br>
+Temperature: ${accuWeather ? accuWeather.Temperature.Value : 'Service is Unavailable'}°C <br>
 </div>
 </div>
 </div>

@@ -170,9 +170,7 @@ class MapController extends Controller
                     [
                         'WeatherIcon' => $weather->icon,
                         'Temperature' => [
-                            'Metric' => [
-                                'Value' => $weather->temp
-                            ],
+                            'Value' => $weather->temp
                         ],
                         'WeatherText' => $weather->title,
                         'type' => Weather::AKKU

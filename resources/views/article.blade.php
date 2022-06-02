@@ -270,13 +270,12 @@
         @if($articles->isNotEmpty())
             <h2 class="text-bold" style="font-size: 1.3rem;margin-top:40px; margin-bottom: 20px;">Articles</h2>
             <div
-                style="flex-basis: 33.333333%"
-                class="d-flex flex-column flex-md-row align-content-center flex-wrap"
+                class="d-flex flex-column flex-md-row align-content-center flex-wrap articles-wrapper"
             >
                 @foreach($articles as $key => $article)
-                    <a href="{{route('article.view',$article)}}" class="card text-center mb-4 ml-md-2">
+                    <a href="{{route('article.view',$article)}}" class="card text-center mb-4 ml-md-2 aaaa">
                         <img class="card-img-top"
-                             style="object-fit:contain; width: 300px; display: block;margin: 0 auto"
+                             style="object-fit:contain; max-width: 300px; display: block;margin: 0 auto"
                              src="{{$article->image}}"
                              alt="Card image cap">
                         <div class="card-body">
